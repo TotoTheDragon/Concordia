@@ -1,4 +1,4 @@
-import { ConcordiaOptions } from "../server";
+import { ConcordiaOptions } from "../manager";
 
 export const DefaultConcordiaOptions: ConcordiaOptions = {
     host: "127.0.0.1",

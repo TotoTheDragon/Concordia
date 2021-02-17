@@ -1,4 +1,4 @@
-import { ConcordiaManager } from "./server";
+import { ConcordiaManager } from "./manager";
 
 async function start() {
 

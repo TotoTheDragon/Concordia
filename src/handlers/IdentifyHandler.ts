@@ -1,5 +1,5 @@
 import { MessagePayload } from "@developerdragon/dragoncordapi";
-import { ConcordiaManager, ExtendedSocket } from "../server";
+import { ConcordiaManager, ExtendedSocket } from "../manager";
 import { MessageHandler } from "./AbstractHandler";
 
 export class IdentifyHandler extends MessageHandler {
@@ -7,7 +7,12 @@ export class IdentifyHandler extends MessageHandler {
     op = 3;
 
     handle(manager: ConcordiaManager, ws: ExtendedSocket, request: MessagePayload): void {
-        throw new Error("Method not implemented.");
+
+        // TODO Check token before identifying
+
+        ws.identified = true;
+        ws.shard = request.d.shard;
+        ws.shardCount = request.d.shardCount;
     }
 
 }
