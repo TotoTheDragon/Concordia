@@ -16,7 +16,7 @@ export class APIManager {
     }
 
     listen() {
-        this._app.listen(this.manager.options.APIport, this.manager.options.APIhost);
+        this._app.listen(this.manager.options.APIport, this.manager.options.APIhost, () => this.manager.logger.emit("LOG", "API", "Now listening on", `${this.manager.options.APIhost}:${this.manager.options.APIport}`));
     }
 
     setupDefaultRoutes() {
