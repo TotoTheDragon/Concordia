@@ -13,6 +13,8 @@ export class WebSocketManager {
 
     handlers: Map<number, MessageHandler>;
 
+    cleanup: NodeJS.Timeout;
+
 
     constructor(manager: ConcordiaManager) {
         this.manager = manager;
@@ -24,6 +26,7 @@ export class WebSocketManager {
 
         /* Start server */
         this.setupServer();
+        this.startCleanup();
     }
 
     setupServer() {
@@ -55,6 +58,16 @@ export class WebSocketManager {
             socket.send(JSON.stringify({ error: err.message }));
             socket.terminate();
         }
+    }
+
+    startCleanup(): void {
+        if (this.cleanup) clearInterval(this.cleanup);
+        this.cleanup = setInterval(() => {
+            const expiredTime = Date.now() - 60000; // 60 seconds ago, heartbeats take 40 secs. Gives the clients 20 seconds leeway
+            this.wss.clients.forEach((client: ExtendedSocket) => {
+                if (client.lastHeartbeat && client.lastHeartbeat < expiredTime) client.terminate();
+            })
+        }, 20000);
     }
 
 }
