@@ -1,5 +1,6 @@
 import { MessagePayload } from "@developerdragon/dragoncordapi";
-import { ConcordiaManager, ExtendedSocket } from "../manager";
+import { ConcordiaManager } from "../manager";
+import { ExtendedSocket } from "../util/Constants";
 import { MessageHandler } from "./AbstractHandler";
 
 export class HeartbeatHandler extends MessageHandler {

@@ -1,9 +1,8 @@
-import WebSocket from "ws";
 import { MessageHandler } from "./handlers/AbstractHandler";
 import { SimpleLogger } from "./Logger";
 import { PluginManager } from "./plugins/PluginManager";
 import { ServerPlugin } from "./plugins/ServerPlugin";
-import { DefaultConcordiaOptions } from "./util/Constants";
+import { ConcordiaOptions, DefaultConcordiaOptions } from "./util/Constants";
 import { Util } from "./util/Util";
 import { WebSocketManager } from "./WebsocketManager";
 
@@ -36,17 +35,4 @@ export class ConcordiaManager {
         return this.pluginManager.registerPlugin(plugin);
     }
 
-}
-
-export interface ConcordiaOptions {
-    host?: string;
-    port?: number;
-}
-
-export interface ExtendedSocket extends WebSocket {
-    [x: string]: any;
-    identified: boolean,
-    shard: number | number[],
-    shardCount: number,
-    lastHeartbeat: number;
 }

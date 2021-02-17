@@ -3,7 +3,8 @@ import { Data, Server } from "ws";
 import { MessageHandler } from "./handlers/AbstractHandler";
 import { HeartbeatHandler } from "./handlers/HeartbeatHandler";
 import { IdentifyHandler } from "./handlers/IdentifyHandler";
-import { ConcordiaManager, ExtendedSocket } from "./manager";
+import { ConcordiaManager } from "./manager";
+import { ExtendedSocket } from "./util/Constants";
 
 export class WebSocketManager {
 
