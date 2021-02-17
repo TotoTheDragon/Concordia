@@ -33,7 +33,7 @@ export class WebSocketManager {
     setupServer() {
         if (this.wss) return;
         this.wss = new Server({ host: this.manager.options.host, port: this.manager.options.port });
-        this.wss.on("listening", () => this.manager.logger.emit("LOG", "LISTENING", "Now listening on", `${this.wss.options.host}:${this.wss.options.port}`));
+        this.wss.on("listening", () => this.manager.logger.emit("LOG", "WEBSOCKET", "Now listening on", `${this.wss.options.host}:${this.wss.options.port}`));
         this.wss.on("connection", (ws: ExtendedSocket) => {
             this.manager.logger.emit("DEBUG", "OPEN", `${ws._socket.remoteAddress}:${ws._socket.remotePort} >`, "Connection opened")
             ws.on("message", (data: Data) => this.handleMessage(ws, data.toString()));
