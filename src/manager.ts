@@ -1,3 +1,4 @@
+import { APIManager } from "./api/APIManager";
 import { MessageHandler } from "./handlers/AbstractHandler";
 import { SimpleLogger } from "./Logger";
 import { PluginManager } from "./plugins/PluginManager";
@@ -8,6 +9,8 @@ import { WebSocketManager } from "./WebsocketManager";
 
 export class ConcordiaManager {
 
+    startDate: number;
+
     options: ConcordiaOptions;
 
     logger: SimpleLogger;
@@ -16,15 +19,20 @@ export class ConcordiaManager {
 
     pluginManager: PluginManager;
 
+    APIManager: APIManager;
 
     constructor(options?: ConcordiaOptions) {
         this.options = Util.mergeDefault(DefaultConcordiaOptions, options);
 
         this.logger = new SimpleLogger(true);
 
+        this.APIManager = new APIManager(this);
+
         this.websocketManager = new WebSocketManager(this);
 
         this.pluginManager = new PluginManager(this);
+        this.APIManager.listen();
+        this.startDate = Date.now();
     }
 
     registerHandler(handler: MessageHandler): void {

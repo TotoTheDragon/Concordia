@@ -7,7 +7,9 @@ import WebSocket from "ws";
 
 export const DefaultConcordiaOptions: ConcordiaOptions = {
     host: "127.0.0.1",
-    port: 7591
+    port: 7591,
+    APIhost: "127.0.0.1",
+    APIport: 3000
 }
 
 /*
@@ -15,8 +17,10 @@ export const DefaultConcordiaOptions: ConcordiaOptions = {
 */
 
 export interface ConcordiaOptions {
-    host?: string;
-    port?: number;
+    host?: string,
+    port?: number,
+    APIhost?: string,
+    APIport?: number;
 }
 
 export interface ExtendedSocket extends WebSocket {
