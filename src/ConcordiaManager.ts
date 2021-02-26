@@ -31,6 +31,7 @@ export class ConcordiaManager {
         this.websocketManager = new WebSocketManager(this);
 
         this.pluginManager = new PluginManager(this);
+
         this.APIManager.listen();
         this.startDate = Date.now();
     }
