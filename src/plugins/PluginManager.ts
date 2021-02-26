@@ -1,4 +1,4 @@
-import { ConcordiaManager } from "../manager";
+import { ConcordiaManager } from "../ConcordiaManager";
 import { ServerPlugin } from "./ServerPlugin";
 
 export class PluginManager {

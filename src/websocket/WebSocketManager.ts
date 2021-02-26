@@ -4,8 +4,8 @@ import { MessageHandler } from "./handlers/AbstractHandler";
 import { HeartbeatHandler } from "./handlers/HeartbeatHandler";
 import { IdentifyHandler } from "./handlers/IdentifyHandler";
 import { StatisticsHandler } from "./handlers/StatisticsHandler";
-import { ConcordiaManager } from "./ConcordiaManager";
-import { ExtendedSocket } from "./util/Constants";
+import { ConcordiaManager } from "../ConcordiaManager";
+import { ExtendedSocket } from "../util/Constants";
 
 export class WebSocketManager {
 

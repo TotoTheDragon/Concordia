@@ -1,7 +1,7 @@
 import { MessagePayload } from "@developerdragon/dragoncordapi";
-import { ConcordiaManager } from "../manager";
-import { ExtendedSocket } from "../util/Constants";
-import { WebSocketManager } from "../WebsocketManager";
+import { ConcordiaManager } from "../../ConcordiaManager";
+import { ExtendedSocket } from "../../util/Constants";
+import { WebSocketManager } from "../WebSocketManager";
 
 export abstract class MessageHandler {
 

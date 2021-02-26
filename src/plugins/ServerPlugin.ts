@@ -1,4 +1,4 @@
-import { ConcordiaManager } from "../manager";
+import { ConcordiaManager } from "../ConcordiaManager";
 
 export abstract class ServerPlugin {
 

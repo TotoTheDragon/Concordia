@@ -1,6 +1,6 @@
 import { info } from "console";
 import express, { Application, IRoute } from "express";
-import { ConcordiaManager } from "../manager";
+import { ConcordiaManager } from "../ConcordiaManager";
 import { ServerPlugin } from "../plugins/ServerPlugin";
 
 export class APIManager {
