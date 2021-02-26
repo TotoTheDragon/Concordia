@@ -3,7 +3,8 @@ import { Data, Server } from "ws";
 import { MessageHandler } from "./handlers/AbstractHandler";
 import { HeartbeatHandler } from "./handlers/HeartbeatHandler";
 import { IdentifyHandler } from "./handlers/IdentifyHandler";
-import { ConcordiaManager } from "./manager";
+import { StatisticsHandler } from "./handlers/StatisticsHandler";
+import { ConcordiaManager } from "./ConcordiaManager";
 import { ExtendedSocket } from "./util/Constants";
 
 export class WebSocketManager {
@@ -24,6 +25,17 @@ export class WebSocketManager {
         this.handlers = new Map();
         new HeartbeatHandler().register(this);
         new IdentifyHandler().register(this);
+        new StatisticsHandler().register(this);
+
+        setInterval(() => {
+            this.wss.clients.forEach(ws => {
+                ws.send(JSON.stringify({
+                    op: 4,
+                    t: "METRICS",
+                    d: null
+                }))
+            })
+        }, 10000);
 
         /* Start server */
         this.setupServer();
@@ -45,7 +57,7 @@ export class WebSocketManager {
                 },
                 t: null,
                 s: null
-            }))
+            }));
         });
     }
 
