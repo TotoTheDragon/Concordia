@@ -1,6 +1,6 @@
 import { APIManager } from "./api/APIManager";
 import { MessageHandler } from "./websocket/handlers/AbstractHandler";
-import { SimpleLogger } from "./Logger";
+import { SimpleLogger } from "./util/Logger";
 import { PluginManager } from "./plugins/PluginManager";
 import { ServerPlugin } from "./plugins/ServerPlugin";
 import { ConcordiaOptions, DefaultConcordiaOptions } from "./util/Constants";
