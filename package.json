@@ -19,13 +19,20 @@
   "homepage": "https://github.com/TotoTheDragon/Concordia#readme",
   "dependencies": {
     "@developerdragon/dragoncordapi": "^1.0.11",
+    "@epegzz/winston-dev-console": "^1.1.0",
     "@types/express": "^4.17.11",
     "@types/node": "^14.14.28",
     "@types/ws": "^7.4.0",
+    "dotenv": "^8.2.0",
+    "eventemitter3000": "^1.0.0",
     "express": "^4.17.1",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3",
     "ws": "^7.4.3"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/uuid": "^8.3.0",
     "shx": "^0.3.3"
   }
 }

@@ -1,3 +1,7 @@
+import { config } from "dotenv";
+
+config();
+
 /*
     Constants
 */
@@ -5,12 +9,12 @@
 import WebSocket from "ws";
 
 export const DefaultConcordiaOptions: ConcordiaOptions = {
-    host: "127.0.0.1",
-    port: 7591,
-    APIhost: "127.0.0.1",
-    APIport: 3000,
-    logLevel: "info",
-    token: null
+    host: process.env.CONCORDIA_MANAGER_HOST ?? "127.0.0.1",
+    port: process.env.CONCORDIA_MANAGER_PORT as unknown as number ?? 7591,
+    APIhost: process.env.CONCORDIA_API_HOST ?? "127.0.0.1",
+    APIport: process.env.CONCORDIA_API_PORT as unknown as number ?? 3000,
+    logLevel: process.env.DEBUG ? "debug" : "info",
+    token: process.env.CONCORDIA_MANAGER_TOKEN ?? null
 }
 
 /*
