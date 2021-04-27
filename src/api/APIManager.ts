@@ -1,4 +1,3 @@
-import { info } from "console";
 import express, { Application, IRoute } from "express";
 import { ConcordiaManager } from "../ConcordiaManager";
 import { ServerPlugin } from "../plugins/ServerPlugin";
@@ -16,7 +15,14 @@ export class APIManager {
     }
 
     listen() {
-        this._app.listen(this.manager.options.APIport, this.manager.options.APIhost, () => this.manager.logger.emit("LOG", "API", "Now listening on", `${this.manager.options.APIhost}:${this.manager.options.APIport}`));
+        this._app.listen(this.manager.options.APIport, this.manager.options.APIhost, () => this.manager.logger.info(
+            "Started listening",
+            "API",
+            {
+                ip: `${this.manager.options.APIhost}:${this.manager.options.APIport}`
+            }
+        )
+        );
     }
 
     setupDefaultRoutes() {
@@ -26,7 +32,6 @@ export class APIManager {
     }
 
     getRoute(plugin?: ServerPlugin, ...route: string[]): IRoute {
-        console.log([plugin?.identifier || undefined, ...route].filter(x => x !== undefined))
         return this._app.route("/" + [plugin?.identifier || undefined, ...route].filter(x => x !== undefined).join("/"));
     }
 }
