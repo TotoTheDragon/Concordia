@@ -9,10 +9,15 @@ export class StatisticsHandler extends MessageHandler {
 
     handle(manager: ConcordiaManager, ws: ExtendedSocket, request: MessagePayload): void {
 
-        const type: string = request.t;
-
-        console.log(`Received statistics (${type}): `, JSON.stringify(request.d))
-
+        manager.logger.debug(
+            "Received statistics",
+            "statistics",
+            {
+                socketID: ws.id,
+                type: request.t,
+                data: request.d
+            }
+        );
     }
 
 }
