@@ -1,16 +1,16 @@
-import express, { Application, IRoute } from "express";
+import fastify, { FastifyInstance } from "fastify";
 import { ConcordiaManager } from "../ConcordiaManager";
-import { ServerPlugin } from "../plugins/ServerPlugin";
 
 export class APIManager {
 
     manager: ConcordiaManager;
 
-    _app: Application
+    _app: FastifyInstance;
 
     constructor(manager: ConcordiaManager) {
         this.manager = manager;
-        this._app = express();
+        this._app = fastify();
+        this.setupLogging();
         this.setupDefaultRoutes();
     }
 
@@ -25,13 +25,17 @@ export class APIManager {
         );
     }
 
+    setupLogging() {
+        this._app.addHook("preHandler", (req, res, done) => {
+            this.manager.logger.http(`${req.method} ${req.url} (${req.id})`)
+            done();
+        })
+    }
+
     setupDefaultRoutes() {
-        this.getRoute().get((req, res) => {
+        this._app.get("/stats", (req, res) => {
             res.status(200).send({ uptime: Date.now() - this.manager.startDate });
         });
     }
 
-    getRoute(plugin?: ServerPlugin, ...route: string[]): IRoute {
-        return this._app.route("/" + [plugin?.identifier || undefined, ...route].filter(x => x !== undefined).join("/"));
-    }
 }

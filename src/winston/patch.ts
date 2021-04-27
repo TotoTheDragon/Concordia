@@ -52,7 +52,7 @@ export function init(logger: Logger): Logger {
     patchedLogger.warn = createPatchedLogger(logger, 'warn')
     patchedLogger.info = createNonPatchedLogger(logger, 'info')
     patchedLogger.debug = createPatchedLogger(logger, 'debug')
-    patchedLogger.http = createPatchedLogger(logger, 'http')
+    patchedLogger.http = createNonPatchedLogger(logger, 'http')
     patchedLogger.verbose = createPatchedLogger(logger, 'verbose')
     patchedLogger.input = createPatchedLogger(logger, 'input')
     patchedLogger.silly = createPatchedLogger(logger, 'silly')
