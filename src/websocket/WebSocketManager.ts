@@ -46,7 +46,7 @@ export class WebSocketManager {
     setupServer() {
         if (this.wss) return;
         this.wss = new Server({ host: this.manager.options.host, port: this.manager.options.port });
-
+        this.wss.on("error", (err) => this.manager.logger.error("Error on starting websocket listener", "websocket", err))
         this.wss.on("listening", () =>
             this.manager.logger.info(
                 "Started listening",
