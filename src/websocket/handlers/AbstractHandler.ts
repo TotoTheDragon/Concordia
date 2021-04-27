@@ -9,7 +9,6 @@ export abstract class MessageHandler {
 
     abstract handle(manager: ConcordiaManager, ws: ExtendedSocket, request: MessagePayload): void;
 
-    register(manager: WebSocketManager) {
-        manager.handlers.set(this.op, this);
-    }
+    register = (manager: WebSocketManager) => { manager.handlers.set(this.op, this) }
+
 }
