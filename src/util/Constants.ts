@@ -1,4 +1,3 @@
-
 /*
     Constants
 */
@@ -9,7 +8,9 @@ export const DefaultConcordiaOptions: ConcordiaOptions = {
     host: "127.0.0.1",
     port: 7591,
     APIhost: "127.0.0.1",
-    APIport: 3000
+    APIport: 3000,
+    logLevel: "info",
+    token: null
 }
 
 /*
@@ -20,13 +21,17 @@ export interface ConcordiaOptions {
     host?: string,
     port?: number,
     APIhost?: string,
-    APIport?: number;
+    APIport?: number,
+    logLevel?: string,
+    token?: string
 }
 
 export interface ExtendedSocket extends WebSocket {
-    [x: string]: any;
+    [x: string]: any,
+    id: string,
     identified: boolean,
     shard: number | number[],
     shardCount: number,
-    lastHeartbeat: number;
+    referenceID: string,
+    lastHeartbeat: number
 }

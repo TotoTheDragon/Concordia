@@ -1,11 +1,12 @@
 import { MessagePayload } from "@developerdragon/dragoncordapi";
-import { Data, Server } from "ws";
+import { v4 } from "uuid";
+import { Server } from "ws";
+import { ConcordiaManager } from "../ConcordiaManager";
+import { ExtendedSocket } from "../util/Constants";
 import { MessageHandler } from "./handlers/AbstractHandler";
 import { HeartbeatHandler } from "./handlers/HeartbeatHandler";
 import { IdentifyHandler } from "./handlers/IdentifyHandler";
 import { StatisticsHandler } from "./handlers/StatisticsHandler";
-import { ConcordiaManager } from "../ConcordiaManager";
-import { ExtendedSocket } from "../util/Constants";
 
 export class WebSocketManager {
 
@@ -29,11 +30,11 @@ export class WebSocketManager {
 
         setInterval(() => {
             this.wss.clients.forEach(ws => {
-                ws.send(JSON.stringify({
+                ws.send({
                     op: 4,
                     t: "METRICS",
                     d: null
-                }))
+                });
             })
         }, 10000);
 
@@ -45,30 +46,96 @@ export class WebSocketManager {
     setupServer() {
         if (this.wss) return;
         this.wss = new Server({ host: this.manager.options.host, port: this.manager.options.port });
-        this.wss.on("listening", () => this.manager.logger.emit("LOG", "WEBSOCKET", "Now listening on", `${this.wss.options.host}:${this.wss.options.port}`));
-        this.wss.on("connection", (ws: ExtendedSocket) => {
-            this.manager.logger.emit("DEBUG", "OPEN", `${ws._socket.remoteAddress}:${ws._socket.remotePort} >`, "Connection opened")
-            ws.on("message", (data: Data) => this.handleMessage(ws, data.toString()));
-            ws.on("close", () => this.manager.logger.emit("DEBUG", "CLOSE", `${ws._socket.remoteAddress}:${ws._socket.remotePort} >`, "Connection closed"));
-            ws.send(JSON.stringify({
-                op: 1,
-                d: {
-                    heartbeatInterval: 40000
+
+        this.wss.on("listening", () =>
+            this.manager.logger.info(
+                "Started listening",
+                "websocket",
+                {
+                    ip: `${this.wss.options.host}:${this.wss.options.port}`
+                }
+            )
+        );
+
+        this.wss.on("connection", this._handleNewConnection.bind(this));
+    }
+
+    _handleNewConnection(ws: ExtendedSocket) {
+
+        this.manager.logger.debug(
+            "Connection opened",
+            "websocket",
+            "client",
+            {
+                ip: `${ws._socket.remoteAddress}:${ws._socket.remotePort}`
+            }
+        );
+
+        ws.id = v4();
+
+        this.manager.logger.debug(
+            "Assigned ID to connection",
+            "websocket",
+            {
+                ip: `${ws._socket.remoteAddress}:${ws._socket.remotePort}`,
+                id: ws.id
+            }
+        );
+
+
+        ws.send = (f => u => {
+            f(JSON.stringify(u));
+            this.manager.logger.debug(
+                "Sending payload",
+                "websocket",
+                {
+                    ip: `${ws._socket.remoteAddress}:${ws._socket.remotePort}`,
+                    id: ws.id,
                 },
-                t: null,
-                s: null
-            }));
+                u);
+        })(ws.send.bind(ws));
+
+
+        ws.on("message", this._handleWSMessage.bind(this, ws));
+        ws.on("close", this._handleWSClose.bind(this, ws));
+        ws.send({
+            op: 1,
+            d: {
+                heartbeatInterval: 40000
+            },
+            t: null,
+            s: null
         });
     }
 
-    handleMessage(socket: ExtendedSocket, message: string) {
-        this.manager.logger.emit("DEBUG", "MESSAGE", `${socket._socket.remoteAddress}:${socket._socket.remotePort} >`, message);
+    _handleWSClose(ws: ExtendedSocket) {
+        this.manager.logger.debug(
+            "Connection closed",
+            "websocket",
+            "client",
+            {
+                ip: `${ws._socket.remoteAddress}:${ws._socket.remotePort}`,
+                id: ws.id
+            }
+        );
+    }
+
+    _handleWSMessage(socket: ExtendedSocket, message: string) {
         try {
-            const json: MessagePayload = JSON.parse(message);
-            if (this.handlers.has(json.op)) return this.handlers.get(json.op).handle(this.manager, socket, json);
-            this.manager.logger.emit("ERROR", "UNKNOWN MESSAGE", `${socket._socket.remoteAddress}:${socket._socket.remotePort} >`, message);
+            const json: MessagePayload = JSON.parse(message.toString());
+            if (!this.handlers.has(json.op))
+                return this.manager.logger.debug(
+                    "Received unknown message",
+                    "websocket",
+                    {
+                        ip: `${socket._socket.remoteAddress}:${socket._socket.remotePort}`,
+                        id: socket.id
+                    },
+                    json
+                );
+            this.handlers.get(json.op).handle(this.manager, socket, json);
         } catch (err) {
-            socket.send(JSON.stringify({ error: err.message }));
+            socket.send({ error: err.message });
             socket.terminate();
         }
     }
