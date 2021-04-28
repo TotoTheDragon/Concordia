@@ -17,7 +17,11 @@ export class APIManager {
     listen() {
         this._app.listen(this.manager.options.APIport, this.manager.options.APIhost, (err, address) => {
             if (err)
-                this.manager.logger.error("Error on starting API listener", "API", err)
+                this.manager.logger.error(
+                    "Error on starting API listener",
+                    "API",
+                    err
+                );
             else
                 this.manager.logger.info(
                     "Started listening",
@@ -25,7 +29,7 @@ export class APIManager {
                     {
                         address
                     }
-                )
+                );
         }
         );
     }
