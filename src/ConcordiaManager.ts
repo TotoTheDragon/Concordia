@@ -37,6 +37,10 @@ export class ConcordiaManager {
         this.startDate = Date.now(); // Successfully initialized. Set start date
     }
 
+    get uptime(): number {
+        return Date.now() - this.startDate;
+    }
+
     registerHandler(handler: MessageHandler): void {
         return handler.register(this.websocketManager);
     }

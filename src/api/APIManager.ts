@@ -1,5 +1,6 @@
 import fastify, { FastifyInstance } from "fastify";
 import { ConcordiaManager } from "../ConcordiaManager";
+import APIRouter from "./routes/api-router";
 
 export class APIManager {
 
@@ -35,16 +36,18 @@ export class APIManager {
     }
 
     setupLogging() {
-        this._app.addHook("preHandler", (req, res, done) => {
+        this._app.addHook("preHandler", (req, _res, done) => {
             this.manager.logger.http(`${req.method} ${req.url} (${req.id})`)
+            done();
+        })
+        this._app.addHook("onSend", (req, res, _payload, done) => {
+            this.manager.logger.http(`${res.statusCode} ${req.method} ${req.url} (${req.id})`)
             done();
         })
     }
 
     setupDefaultRoutes() {
-        this._app.get("/stats", (req, res) => {
-            res.status(200).send({ uptime: Date.now() - this.manager.startDate });
-        });
+        this._app.decorate('concordia', this.manager);
+        this._app.register(APIRouter, { prefix: "/api/" })
     }
-
 }

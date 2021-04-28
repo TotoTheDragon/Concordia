@@ -14,14 +14,15 @@
         "strict": false,
         "strictFunctionTypes": false,
         "skipLibCheck": true,
-        "downlevelIteration": true,
+        "downlevelIteration": false,
         "sourceMap": false,
-        "inlineSourceMap": true,
-        "inlineSources": true,
+        "inlineSourceMap": false,
+        "inlineSources": false,
         "incremental": true,
         "esModuleInterop": true,
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
+        "typeRoots": ["./src/types"]
     },
     "include": [
         "src/**/*.ts"
