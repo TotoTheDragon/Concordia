@@ -6,7 +6,6 @@ import { ExtendedSocket } from "../util/Constants";
 import { MessageHandler } from "./handlers/AbstractHandler";
 import { HeartbeatHandler } from "./handlers/HeartbeatHandler";
 import { IdentifyHandler } from "./handlers/IdentifyHandler";
-import { StatisticsHandler } from "./handlers/StatisticsHandler";
 
 export class WebSocketManager {
 
@@ -26,17 +25,6 @@ export class WebSocketManager {
         this.handlers = new Map();
         new HeartbeatHandler().register(this);
         new IdentifyHandler().register(this);
-        new StatisticsHandler().register(this);
-
-        setInterval(() => {
-            this.wss.clients.forEach(ws => {
-                ws.send({
-                    op: 4,
-                    t: "METRICS",
-                    d: null
-                });
-            })
-        }, 10000);
 
         /* Start server */
         this.setupServer();
