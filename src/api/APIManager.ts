@@ -10,7 +10,7 @@ export class APIManager {
 
     constructor(manager: ConcordiaManager) {
         this.manager = manager;
-        this._app = fastify();
+        this._app = fastify({ ignoreTrailingSlash: true });
         this.setupLogging();
         this.setupDefaultRoutes();
     }
@@ -48,6 +48,7 @@ export class APIManager {
 
     setupDefaultRoutes() {
         this._app.decorate('concordia', this.manager);
-        this._app.register(APIRouter, { prefix: "/api/" })
+        this._app.decorate('apiManager', this);
+        this._app.register(APIRouter, { prefix: "/api" })
     }
 }
